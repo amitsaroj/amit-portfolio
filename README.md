@@ -1,4 +1,4 @@
-# Amit Saroj Abyss 2030 Portfolio
+# Amit Saroj Portfolio
 
 A polished Next.js portfolio built from the Stitch "Personal Portfolio Showcase" visual direction.
 
