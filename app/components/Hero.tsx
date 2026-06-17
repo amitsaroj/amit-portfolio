@@ -72,7 +72,7 @@ export default function Hero() {
 
         <motion.h1 className="hero-name" variants={itemVariants}>
           {profile.name.split(" ")[0]}
-          {/* <br /> */}
+          <br />
           {profile.name.split(" ")[1]}
         </motion.h1>
 

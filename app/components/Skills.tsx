@@ -22,6 +22,17 @@ const cardVariants = {
   }),
 };
 
+const CATEGORY_COLORS: Record<string, string> = {
+  Languages: "#6366f1",
+  Backend: "#8b5cf6",
+  Frontend: "#22d3ee",
+  Databases: "#10b981",
+  "AI & Automation": "#f59e0b",
+  "DevOps & Cloud": "#a78bfa",
+  Web3: "#ec4899",
+  Practices: "#64748b",
+};
+
 const SearchIcon = () => (
   <svg
     aria-hidden="true"
@@ -53,6 +64,8 @@ function SkillCategoryCard({
   );
   if (search && filtered.length === 0) return null;
 
+  const color = CATEGORY_COLORS[cat.category] ?? "#6366f1";
+
   return (
     <motion.div
       className="skill-category-card"
@@ -62,12 +75,13 @@ function SkillCategoryCard({
       viewport={{ once: true, margin: "-40px" }}
       variants={cardVariants}
       aria-label={`${cat.category} skills`}
+      style={{ "--cat-color": color, borderTopColor: color } as React.CSSProperties}
     >
       <div className="skill-category-header">
-        <span className="skill-category-icon" aria-hidden="true">
+        <span className="skill-category-icon" aria-hidden="true" style={{ color }}>
           {cat.icon}
         </span>
-        <h3 className="skill-category-title">{cat.category}</h3>
+        <h3 className="skill-category-title" style={{ color }}>{cat.category}</h3>
       </div>
       <div className="skill-tags" role="list">
         {cat.skills.map((skill) => {

@@ -25,12 +25,12 @@ const cardVariants = {
 const ExternalLinkIcon = () => (
   <svg
     aria-hidden="true"
-    width="14"
-    height="14"
+    width="13"
+    height="13"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth="2.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
@@ -61,10 +61,11 @@ function ProjectCard({
       viewport={{ once: true, margin: "-60px" }}
       variants={cardVariants}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      style={{ "--project-accent": project.accent } as React.CSSProperties}
     >
       <div
         className="project-card-top-bar"
-        style={{ background: `linear-gradient(90deg, ${project.accent}, ${project.accent}88)` }}
+        style={{ background: `linear-gradient(90deg, ${project.accent}, ${project.accent}66)` }}
         aria-hidden="true"
       />
       <div className="project-card-body">
@@ -115,12 +116,13 @@ export default function Projects() {
   const featured = projects.find((p) => p.featured);
   const nonFeatured = projects.filter((p) => !p.featured);
 
-  const filteredNonFeatured = nonFeatured.filter((p) => {
+  const matchesFilter = (p: ProjectItem) => {
     if (filter === "All") return true;
     return p.stack.includes(filter);
-  });
+  };
 
-  const showFeatured = featured && (filter === "All" || featured.stack.includes(filter));
+  const showFeatured = featured && matchesFilter(featured);
+  const filteredNonFeatured = nonFeatured.filter(matchesFilter);
 
   return (
     <section
@@ -138,8 +140,7 @@ export default function Projects() {
         <span className="section-label">Work</span>
         <h2 className="section-title">Projects</h2>
         <p className="section-subtitle">
-          Real-world platforms built with modern architecture, deployed in production
-          environments.
+          Real-world platforms built with modern architecture, deployed in production environments.
         </p>
       </motion.div>
 
@@ -157,7 +158,13 @@ export default function Projects() {
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div key={filter} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+        <motion.div
+          key={filter}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
           {showFeatured && featured && (
             <div style={{ marginBottom: "var(--space-lg)" }}>
               <ProjectCard project={featured} index={0} featured={true} />
@@ -169,6 +176,10 @@ export default function Projects() {
               <ProjectCard key={p.name} project={p} index={i + 1} featured={false} />
             ))}
           </div>
+
+          {!showFeatured && filteredNonFeatured.length === 0 && (
+            <p className="projects-empty">No projects match this filter.</p>
+          )}
         </motion.div>
       </AnimatePresence>
     </section>

@@ -238,6 +238,7 @@ export interface EducationItem {
   field: string;
   institution: string;
   period: string;
+  level: "diploma" | "intermediate" | "highschool";
 }
 
 export const education: EducationItem[] = [
@@ -246,6 +247,21 @@ export const education: EducationItem[] = [
     field: "Computer Science and Engineering",
     institution: "Board of Technical Education, Uttar Pradesh, Lucknow",
     period: "2017 – 2019",
+    level: "diploma",
+  },
+  {
+    degree: "Intermediate (Class XII)",
+    field: "Science",
+    institution: "Uttar Pradesh Board",
+    period: "2015",
+    level: "intermediate",
+  },
+  {
+    degree: "High School (Class X)",
+    field: "Science",
+    institution: "Uttar Pradesh Board",
+    period: "2013",
+    level: "highschool",
   },
 ];
 
