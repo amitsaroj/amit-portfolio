@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ClientShell from "./components/ClientShell";
 import Navigation from "./components/Navigation";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -15,8 +16,9 @@ export const metadata: Metadata = buildMetadata({ page: "home" });
 
 export default function Home() {
   return (
-    <div className="portfolio-root">
-      <Navigation />
+    <ClientShell>
+      <div className="portfolio-root">
+        <Navigation />
   
       <main id="main-content" tabIndex={-1}>
         <Hero />
@@ -62,6 +64,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </ClientShell>
   );
 }
