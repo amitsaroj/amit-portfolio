@@ -1003,30 +1003,20 @@ img {
   position: relative;
 }
 
-.gh-slider {
-  display: flex;
+.gh-slide-viewport {
+  overflow: hidden;
+}
+
+.gh-slide {
+  display: grid;
+  grid-template-columns: repeat(var(--gh-cols, 4), 1fr);
   gap: 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding-bottom: var(--space-sm);
-  cursor: grab;
-}
-
-.gh-slider::-webkit-scrollbar {
-  display: none;
-}
-
-.gh-slider:active {
-  cursor: grabbing;
 }
 
 .gh-repo-card {
-  flex: 0 0 288px;
-  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
+  height: 100%;
   background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
@@ -1196,6 +1186,20 @@ img {
   align-items: center;
   justify-content: space-between;
   margin-top: var(--space-xl);
+}
+
+.gh-slider-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.gh-slide-counter {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5rem;
+  text-align: right;
 }
 
 .gh-view-all {

@@ -124,7 +124,7 @@ export default function Hero() {
           <a
             className="btn-secondary"
             href={profile.resumeUrl}
-            download="Amit_Saroj_Resume.pdf"
+            download="Amit_Saroj_5_Years.pdf"
             aria-label="Download Amit Saroj's resume"
           >
             Download Resume

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { profile } from "../data/profile";
 
 interface GitHubRepo {
@@ -40,8 +40,13 @@ const LANG_COLORS: Record<string, string> = {
   "Jupyter Notebook": "#DA5B0B",
 };
 
-const CARD_W = 288;
-const GAP = 16;
+const REPOS_PER_SLIDE = 4;
+
+function getCols(width: number): number {
+  if (width <= 680) return 1;
+  if (width <= 900) return 2;
+  return 4;
+}
 
 function relativeTime(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -164,9 +169,8 @@ const headerVariants = {
 export default function GitHubActivity() {
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(true);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [cols, setCols] = useState(4);
 
   useEffect(() => {
     fetch(
@@ -185,26 +189,39 @@ export default function GitHubActivity() {
       .finally(() => setLoading(false));
   }, []);
 
-  const updateNav = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanPrev(el.scrollLeft > 8);
-    setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+  useEffect(() => {
+    const updateCols = () => setCols(getCols(window.innerWidth));
+    updateCols();
+    window.addEventListener("resize", updateCols);
+    return () => window.removeEventListener("resize", updateCols);
   }, []);
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateNav, { passive: true });
-    updateNav();
-    return () => el.removeEventListener("scroll", updateNav);
-  }, [repos, updateNav]);
+  const perSlide = REPOS_PER_SLIDE;
 
-  const scroll = (dir: "prev" | "next") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const step = (CARD_W + GAP) * 3;
-    el.scrollBy({ left: dir === "next" ? step : -step, behavior: "smooth" });
+  const slides = useMemo(() => {
+    const chunks: GitHubRepo[][] = [];
+    for (let i = 0; i < repos.length; i += perSlide) {
+      chunks.push(repos.slice(i, i + perSlide));
+    }
+    return chunks;
+  }, [repos, perSlide]);
+
+  useEffect(() => {
+    setSlideIndex(0);
+  }, [perSlide, repos.length]);
+
+  useEffect(() => {
+    if (slideIndex >= slides.length && slides.length > 0) {
+      setSlideIndex(slides.length - 1);
+    }
+  }, [slideIndex, slides.length]);
+
+  const canPrev = slideIndex > 0;
+  const canNext = slideIndex < slides.length - 1;
+  const currentSlide = slides[slideIndex] ?? [];
+
+  const goToSlide = (dir: "prev" | "next") => {
+    setSlideIndex((i) => (dir === "next" ? Math.min(i + 1, slides.length - 1) : Math.max(i - 1, 0)));
   };
 
   const displayed = loading ? null : repos.length;
@@ -230,21 +247,39 @@ export default function GitHubActivity() {
       </motion.div>
 
       <div className="gh-slider-wrap">
-        <div className="gh-slider" ref={scrollRef} role="list" aria-label="GitHub repositories">
-          {loading
-            ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
-            : repos.map((repo) => (
-                <motion.div
-                  key={repo.id}
-                  role="listitem"
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <RepoCard repo={repo} />
-                </motion.div>
+        <div className="gh-slide-viewport" aria-live="polite">
+          {loading ? (
+            <div
+              className="gh-slide"
+              style={{ "--gh-cols": cols } as React.CSSProperties}
+              role="list"
+              aria-label="Loading GitHub repositories"
+            >
+              {Array.from({ length: perSlide }).map((_, i) => (
+                <SkeletonCard key={i} />
               ))}
+            </div>
+          ) : (
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={slideIndex}
+                className="gh-slide"
+                style={{ "--gh-cols": cols } as React.CSSProperties}
+                role="list"
+                aria-label={`GitHub repositories, slide ${slideIndex + 1} of ${slides.length}`}
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                {currentSlide.map((repo) => (
+                  <div key={repo.id} role="listitem">
+                    <RepoCard repo={repo} />
+                  </div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          )}
         </div>
 
         <div className="gh-slider-controls">
@@ -257,23 +292,30 @@ export default function GitHubActivity() {
           >
             View all on GitHub <ExternalIcon />
           </a>
-          <div className="gh-nav-btns" aria-label="Slider navigation">
-            <button
-              className="gh-nav-btn"
-              onClick={() => scroll("prev")}
-              disabled={!canPrev}
-              aria-label="Scroll to previous repositories"
-            >
-              <ChevronIcon dir="left" />
-            </button>
-            <button
-              className="gh-nav-btn"
-              onClick={() => scroll("next")}
-              disabled={!canNext}
-              aria-label="Scroll to next repositories"
-            >
-              <ChevronIcon dir="right" />
-            </button>
+          <div className="gh-slider-meta">
+            {!loading && slides.length > 1 && (
+              <span className="gh-slide-counter" aria-hidden="true">
+                {slideIndex + 1} / {slides.length}
+              </span>
+            )}
+            <div className="gh-nav-btns" aria-label="Slide navigation">
+              <button
+                className="gh-nav-btn"
+                onClick={() => goToSlide("prev")}
+                disabled={!canPrev}
+                aria-label="Previous slide"
+              >
+                <ChevronIcon dir="left" />
+              </button>
+              <button
+                className="gh-nav-btn"
+                onClick={() => goToSlide("next")}
+                disabled={!canNext}
+                aria-label="Next slide"
+              >
+                <ChevronIcon dir="right" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -160,7 +160,7 @@ export default function Contact() {
           <a
             className="contact-link-item"
             href={profile.resumeUrl}
-            download="Amit_Saroj_Resume.pdf"
+            download="Amit_Saroj_5_Years.pdf"
             aria-label="Download Amit Saroj's resume"
           >
             <span className="contact-link-icon"><DownloadIcon /></span>
