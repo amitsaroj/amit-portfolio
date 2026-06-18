@@ -102,7 +102,7 @@ export interface ProjectItem {
   company: string;
   period: string;
   description: string;
-  stack: string[];
+  stack?: string[];
   highlights: string[];
   featured: boolean;
   category: "flagship" | "client";
@@ -117,7 +117,7 @@ export const projects: ProjectItem[] = [
     company: "Personal Project",
     period: "Jan 2026 – Present",
     description:
-      "AI-native, multi-tenant SaaS platform trusted by 2,400+ revenue teams worldwide — unifying CRM, AI Voice Calling, WhatsApp OS, Workflow Automation, and Agentic AI into one autonomous revenue-operations engine. Currently in Public Beta.",
+      "AI-native, multi-tenant SaaS platform — unifying CRM, AI Voice Calling, WhatsApp OS, Workflow Automation, and Agentic AI into one autonomous revenue-operations engine. Currently in Public Beta.",
     stack: ["NestJS", "Next.js", "PostgreSQL", "Redis", "Docker", "OpenAI", "Qdrant", "n8n"],
     highlights: [
       "Built GPT-powered AI agents that autonomously qualify leads, handle objections, book meetings, and nurture prospects 24/7 — with sub-second latency Voice AI, real-time transcription, sentiment analysis, and bulk concurrent outbound campaigns.",
@@ -169,7 +169,7 @@ export const projects: ProjectItem[] = [
     period: "Jan 2021 – Aug 2021",
     description:
       "Healthcare marketplace where doctors list services and patients book appointments using coupon codes — combined with real-time chat and an integrated wellness product store.",
-    stack: ["React.js", "Node.js", "Express.js", "MongoDB", "REST APIs", "JWT"],
+    // stack: ["React.js", "Node.js", "Express.js", "MongoDB", "REST APIs", "JWT"],
     highlights: [
       "Built doctor listing and appointment booking system with coupon code–based service purchasing.",
       "Developed real-time chat feature connecting patients with healthcare providers.",
@@ -186,7 +186,7 @@ export const projects: ProjectItem[] = [
     period: "Aug 2021 – Dec 2021",
     description:
       "Service platform for a US-based mobile device repair shop at Southpoint Mall, Durham — enabling customers to view repair services, get instant price quotes, and book repair appointments online.",
-    stack: ["React.js", "Node.js", "Express.js", "MySQL", "REST APIs"],
+    // stack: ["React.js", "Node.js", "Express.js", "MySQL", "REST APIs"],
     highlights: [
       "Developed service catalog covering iPhone, iPad, Samsung, tablet, and all other phone repairs.",
       "Built instant price quote system with a low-price guarantee and transparent pricing display.",
@@ -203,7 +203,7 @@ export const projects: ProjectItem[] = [
     period: "Jan 2022 – Apr 2022",
     description:
       "Business web platform for a US-based kitchen and bathroom remodeling company — showcasing custom cabinet designs, countertop options (granite, quartz, marble), and full remodeling services.",
-    stack: ["React.js", "Node.js", "Express.js", "MySQL", "REST APIs"],
+    // stack: ["React.js", "Node.js", "Express.js", "MySQL", "REST APIs"],
     highlights: [
       "Built service showcase pages for kitchen, bathroom, basement, and bedroom remodeling.",
       "Developed image gallery and portfolio sections to present completed remodeling projects.",
@@ -220,7 +220,8 @@ export const projects: ProjectItem[] = [
     period: "Sep 2022 – Feb 2023",
     description:
       "Shopify-based e-commerce fashion store selling handcrafted items from Haiti — featuring curated collections, new arrivals, bestsellers, gift cards, and a Square-powered secure checkout.",
-    stack: ["Shopify", "JavaScript", "Liquid", "React.js", "REST APIs"],
+    // stack: ["Shopify", "JavaScript", "Liquid", "React.js", "REST APIs"],
+
     highlights: [
       "Developed custom Shopify theme with product collections, new arrivals, and bestseller sections.",
       "Integrated Square-powered secure checkout supporting CashApp, Apple Pay, Google Pay, and major credit cards.",

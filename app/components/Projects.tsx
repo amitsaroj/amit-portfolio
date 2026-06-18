@@ -96,7 +96,7 @@ function ProjectCard({
 
         <div className="project-footer">
           <div className="project-stack" aria-label="Technologies used">
-            {project.stack.map((tech) => (
+            {project.stack && project.stack.map((tech) => (
               <span className="stack-tag" key={tech}>
                 {tech}
               </span>
@@ -129,7 +129,7 @@ export default function Projects() {
 
   const matchesFilter = (p: ProjectItem) => {
     if (filter === "All") return true;
-    return p.stack.includes(filter);
+    return p.stack?.includes(filter);
   };
 
   const showFeatured = featured && matchesFilter(featured);
