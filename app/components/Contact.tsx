@@ -13,6 +13,15 @@ const sectionVariants = {
   },
 };
 
+const panelVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+  },
+};
+
 const MailIcon = () => (
   <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <rect width="20" height="16" x="2" y="4" rx="2" />
@@ -68,6 +77,106 @@ const CheckIcon = () => (
   </svg>
 );
 
+const ArrowIcon = () => (
+  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 17 17 7" />
+    <path d="M7 7h10v10" />
+  </svg>
+);
+
+type ContactAccent = "indigo" | "emerald" | "cyan" | "violet" | "whatsapp";
+
+interface ContactChannel {
+  id: string;
+  label: string;
+  sublabel: string;
+  href: string;
+  ariaLabel: string;
+  icon: React.ReactNode;
+  accent: ContactAccent;
+  external?: boolean;
+  download?: string;
+}
+
+const primaryChannels: ContactChannel[] = [
+  {
+    id: "whatsapp",
+    label: "WhatsApp",
+    sublabel: "Quick chat",
+    href: profile.whatsapp,
+    ariaLabel: "Chat with Amit Saroj on WhatsApp (opens in new tab)",
+    icon: <WhatsAppIcon />,
+    accent: "whatsapp",
+    external: true,
+  },
+  {
+    id: "phone",
+    label: profile.phone,
+    sublabel: "Direct call",
+    href: `tel:${profile.phone.replace(/\s/g, "")}`,
+    ariaLabel: `Call Amit Saroj at ${profile.phone}`,
+    icon: <PhoneIcon />,
+    accent: "cyan",
+  },
+];
+
+const secondaryChannels: ContactChannel[] = [
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    sublabel: "Professional network",
+    href: profile.linkedin,
+    ariaLabel: "Connect with Amit Saroj on LinkedIn (opens in new tab)",
+    icon: <LinkedinIcon />,
+    accent: "indigo",
+    external: true,
+  },
+  {
+    id: "github",
+    label: "GitHub",
+    sublabel: "Open source work",
+    href: profile.github,
+    ariaLabel: "Follow Amit Saroj on GitHub (opens in new tab)",
+    icon: <GithubIcon />,
+    accent: "violet",
+    external: true,
+  },
+  {
+    id: "resume",
+    label: "Resume",
+    sublabel: "PDF download",
+    href: profile.resumeUrl,
+    ariaLabel: "Download Amit Saroj's resume",
+    icon: <DownloadIcon />,
+    accent: "emerald",
+    download: "Amit_Saroj_5_Years.pdf",
+  },
+];
+
+function ChannelCard({ channel }: { channel: ContactChannel }) {
+  const className = `contact-channel-card contact-channel-${channel.accent}`;
+
+  return (
+    <a
+      className={className}
+      href={channel.href}
+      target={channel.external ? "_blank" : undefined}
+      rel={channel.external ? "noopener noreferrer" : undefined}
+      download={channel.download}
+      aria-label={channel.ariaLabel}
+    >
+      <span className="contact-channel-icon">{channel.icon}</span>
+      <span className="contact-channel-copy">
+        <span className="contact-channel-label">{channel.label}</span>
+        <span className="contact-channel-sublabel">{channel.sublabel}</span>
+      </span>
+      <span className="contact-channel-arrow" aria-hidden="true">
+        <ArrowIcon />
+      </span>
+    </a>
+  );
+}
+
 export default function Contact() {
   const [copied, setCopied] = useState(false);
 
@@ -89,7 +198,7 @@ export default function Contact() {
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionVariants}
       >
-        <div className="section-header">
+        <div className="section-header contact-header">
           <span className="section-label">Contact</span>
           <h2 className="section-title">Let&apos;s work together</h2>
           <p className="section-subtitle">
@@ -98,75 +207,52 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="contact-email-widget" aria-label="Email address">
-          <span className="contact-email-text">{profile.email}</span>
-          <button
-            className={`contact-copy-btn${copied ? " contact-copy-btn-success" : ""}`}
-            onClick={handleCopy}
-            aria-label={copied ? "Email copied to clipboard" : "Copy email to clipboard"}
-          >
-            {copied ? <CheckIcon /> : <CopyIcon />}
-            <span>{copied ? "Copied!" : "Copy"}</span>
-          </button>
-        </div>
+        <motion.div className="contact-panel" variants={panelVariants}>
+          <div className="contact-panel-glow" aria-hidden="true" />
 
-        <nav className="contact-links-list" aria-label="Contact links">
-          <a
-            className="contact-link-item"
-            href={`mailto:${profile.email}`}
-            aria-label="Send email to Amit Saroj"
-          >
-            <span className="contact-link-icon"><MailIcon /></span>
-            Send Email
-          </a>
-          <a
-            className="contact-link-item"
-            href={`tel:${profile.phone.replace(/\s/g, "")}`}
-            aria-label={`Call Amit Saroj at ${profile.phone}`}
-          >
-            <span className="contact-link-icon"><PhoneIcon /></span>
-            {profile.phone}
-          </a>
-          <a
-            className="contact-link-item"
-            href={profile.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Connect with Amit Saroj on LinkedIn (opens in new tab)"
-          >
-            <span className="contact-link-icon"><LinkedinIcon /></span>
-            Connect on LinkedIn
-          </a>
-          <a
-            className="contact-link-item"
-            href={profile.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Follow Amit Saroj on GitHub (opens in new tab)"
-          >
-            <span className="contact-link-icon"><GithubIcon /></span>
-            Follow on GitHub
-          </a>
-          <a
-            className="contact-link-item contact-link-whatsapp"
-            href={profile.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Chat with Amit Saroj on WhatsApp (opens in new tab)"
-          >
-            <span className="contact-link-icon"><WhatsAppIcon /></span>
-            Connect on WhatsApp
-          </a>
-          <a
-            className="contact-link-item"
-            href={profile.resumeUrl}
-            download="Amit_Saroj_5_Years.pdf"
-            aria-label="Download Amit Saroj's resume"
-          >
-            <span className="contact-link-icon"><DownloadIcon /></span>
-            Download Resume
-          </a>
-        </nav>
+          <div className="contact-email-hero">
+            <div className="contact-email-icon" aria-hidden="true">
+              <MailIcon />
+            </div>
+            <div className="contact-email-copy">
+              <span className="contact-email-label">Primary email</span>
+              <span className="contact-email-value">{profile.email}</span>
+            </div>
+            <div className="contact-email-actions">
+              <button
+                type="button"
+                className={`contact-copy-btn${copied ? " contact-copy-btn-success" : ""}`}
+                onClick={handleCopy}
+                aria-label={copied ? "Email copied to clipboard" : "Copy email to clipboard"}
+              >
+                {copied ? <CheckIcon /> : <CopyIcon />}
+                <span>{copied ? "Copied" : "Copy"}</span>
+              </button>
+              <a
+                className="contact-email-cta"
+                href={`mailto:${profile.email}`}
+                aria-label="Send email to Amit Saroj"
+              >
+                Send Email
+                <ArrowIcon />
+              </a>
+            </div>
+          </div>
+
+          <div className="contact-panel-divider" aria-hidden="true" />
+
+          <div className="contact-primary-grid">
+            {primaryChannels.map((channel) => (
+              <ChannelCard key={channel.id} channel={channel} />
+            ))}
+          </div>
+
+          <div className="contact-secondary-grid">
+            {secondaryChannels.map((channel) => (
+              <ChannelCard key={channel.id} channel={channel} />
+            ))}
+          </div>
+        </motion.div>
       </motion.div>
     </section>
   );

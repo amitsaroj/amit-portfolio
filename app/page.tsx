@@ -30,11 +30,25 @@ export default function Home() {
         <hr className="section-divider" />
         <Contact />
       </main>
-      <footer className="site-footer section-container" role="contentinfo">
-        <p className="footer-text">
-          &copy; {new Date().getFullYear()} {profile.name}. Built with Next.js &amp;
-          TypeScript.
-        </p>
+      <footer className="site-footer" role="contentinfo">
+        <div className="site-footer-glow" aria-hidden="true" />
+        <div className="site-footer-inner section-container">
+          <div className="footer-brand">
+            <span className="footer-monogram" aria-hidden="true">AS</span>
+            <div className="footer-brand-copy">
+              <span className="footer-name">{profile.name}</span>
+              <span className="footer-role">{profile.title}</span>
+            </div>
+          </div>
+          <p className="footer-text">
+            &copy; {new Date().getFullYear()} {profile.name}. Crafted with Next.js &amp; TypeScript.
+          </p>
+          <div className="footer-stack" aria-label="Tech stack">
+            <span className="footer-stack-pill">Next.js</span>
+            <span className="footer-stack-pill">TypeScript</span>
+            <span className="footer-stack-pill">Node.js</span>
+          </div>
+        </div>
       </footer>
     </div>
   );
