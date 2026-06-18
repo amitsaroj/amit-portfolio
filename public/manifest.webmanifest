@@ -1,0 +1,22 @@
+{
+  "name": "Amit Saroj Portfolio",
+  "short_name": "Amit Saroj",
+  "description": "Full Stack Developer, AI Engineer and MERN Expert portfolio of Amit Saroj.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080810",
+  "theme_color": "#080810",
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}

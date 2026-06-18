@@ -88,9 +88,10 @@ export default function Hero() {
           {profile.name.split(" ")[0]}
           <br />
           {profile.name.split(" ")[1]}
+          <span className="sr-only"> — {profile.title}, AI Engineer and MERN Developer in India</span>
         </motion.h1>
 
-        <motion.p className="hero-title" variants={itemVariants}>
+        <motion.p className="hero-title" variants={itemVariants} role="doc-subtitle">
           {profile.subtitle}
         </motion.p>
 
