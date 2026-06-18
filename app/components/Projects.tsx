@@ -40,7 +40,17 @@ const ExternalLinkIcon = () => (
   </svg>
 );
 
-const ALL_FILTERS = ["All", "Node.js", "NestJS", "React.js", "Next.js", "OpenAI", "Docker", "Kafka"];
+const ALL_FILTERS = [
+  "All",
+  "Node.js",
+  "NestJS",
+  "React.js",
+  "Next.js",
+  "OpenAI",
+  "Docker",
+  "Kafka",
+  "Shopify",
+];
 
 function ProjectCard({
   project,
@@ -114,7 +124,8 @@ export default function Projects() {
   const [filter, setFilter] = useState("All");
 
   const featured = projects.find((p) => p.featured);
-  const nonFeatured = projects.filter((p) => !p.featured);
+  const flagshipNonFeatured = projects.filter((p) => !p.featured && p.category === "flagship");
+  const clientProjects = projects.filter((p) => p.category === "client");
 
   const matchesFilter = (p: ProjectItem) => {
     if (filter === "All") return true;
@@ -122,7 +133,8 @@ export default function Projects() {
   };
 
   const showFeatured = featured && matchesFilter(featured);
-  const filteredNonFeatured = nonFeatured.filter(matchesFilter);
+  const filteredFlagship = flagshipNonFeatured.filter(matchesFilter);
+  const filteredClient = clientProjects.filter(matchesFilter);
 
   return (
     <section
@@ -165,19 +177,41 @@ export default function Projects() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
         >
+          {/* Featured flagship card */}
           {showFeatured && featured && (
             <div style={{ marginBottom: "var(--space-lg)" }}>
               <ProjectCard project={featured} index={0} featured={true} />
             </div>
           )}
 
-          <div className="projects-grid">
-            {filteredNonFeatured.map((p, i) => (
-              <ProjectCard key={p.name} project={p} index={i + 1} featured={false} />
-            ))}
-          </div>
+          {/* Other flagship projects */}
+          {filteredFlagship.length > 0 && (
+            <div
+              className="projects-grid"
+              style={{ marginBottom: filteredClient.length > 0 ? "var(--space-3xl)" : undefined }}
+            >
+              {filteredFlagship.map((p, i) => (
+                <ProjectCard key={p.name} project={p} index={i + 1} featured={false} />
+              ))}
+            </div>
+          )}
 
-          {!showFeatured && filteredNonFeatured.length === 0 && (
+          {/* Client work section */}
+          {filteredClient.length > 0 && (
+            <>
+              <div className="projects-client-header">
+                <span className="projects-client-label">Client Work</span>
+                <div className="projects-client-line" aria-hidden="true" />
+              </div>
+              <div className="projects-grid">
+                {filteredClient.map((p, i) => (
+                  <ProjectCard key={p.name} project={p} index={i + 1} featured={false} />
+                ))}
+              </div>
+            </>
+          )}
+
+          {!showFeatured && filteredFlagship.length === 0 && filteredClient.length === 0 && (
             <p className="projects-empty">No projects match this filter.</p>
           )}
         </motion.div>

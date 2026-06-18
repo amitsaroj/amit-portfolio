@@ -78,7 +78,7 @@ export const experience: ExperienceItem[] = [
       "Designed and developed full-stack web applications for enterprise clients using MongoDB, Express.js, React.js, Node.js, and TypeScript.",
       "Built and maintained RESTful APIs using Node.js and Express.js with JWT-based authentication and role-based access control.",
       "Developed responsive frontend interfaces using React.js with Redux state management; built reusable UI components and optimized rendering performance.",
-      "Developed OwnerScope, a PropTech ownership and investment-intelligence platform — built assessment and reporting modules, optimized MongoDB queries, and improved performance with Redis caching.",
+      "Developed OwnerScope, a PropTech homeownership guidance platform — built personality assessment and reporting modules, optimized MongoDB queries, and improved performance with Redis caching.",
       "Collaborated in Agile/Scrum environment with cross-functional teams to deliver features on schedule.",
     ],
   },
@@ -105,24 +105,27 @@ export interface ProjectItem {
   stack: string[];
   highlights: string[];
   featured: boolean;
+  category: "flagship" | "client";
   liveUrl?: string;
   accent: string;
 }
 
 export const projects: ProjectItem[] = [
+  /* ── Flagship ── */
   {
-    name: "Autopilot Monster CRM",
-    company: "Antier Solutions",
+    name: "AutopilotMonster – AI Revenue Platform",
+    company: "Personal Project",
     period: "Jan 2026 – Present",
     description:
-      "AI-native, multi-tenant SaaS platform unifying CRM, voice calling, WhatsApp automation, workflow automation, and AI agents into a single revenue-operations system.",
-    stack: ["NestJS", "Next.js", "PostgreSQL", "Redis", "Docker", "OpenAI", "Qdrant"],
+      "AI-native, multi-tenant SaaS platform trusted by 2,400+ revenue teams worldwide — unifying CRM, AI Voice Calling, WhatsApp OS, Workflow Automation, and Agentic AI into one autonomous revenue-operations engine. Currently in Public Beta.",
+    stack: ["NestJS", "Next.js", "PostgreSQL", "Redis", "Docker", "OpenAI", "Qdrant", "n8n"],
     highlights: [
-      "Developed autonomous AI voice agents, conversational chatbots, and RAG-based knowledge retrieval with Qdrant vector memory.",
-      "Implemented strict tenant-level data isolation, JWT with MFA, RBAC, audit logging, and event-driven background processing.",
-      "Built intelligent lead-qualification workflows and AI auto-calling features.",
+      "Built GPT-powered AI agents that autonomously qualify leads, handle objections, book meetings, and nurture prospects 24/7 — with sub-second latency Voice AI, real-time transcription, sentiment analysis, and bulk concurrent outbound campaigns.",
+      "Developed WhatsApp OS (shared team inbox, broadcast campaigns, no-code flow builder), drag-and-drop workflow automation, real-time ARR analytics, and built-in SaaS billing with usage-based pricing and credit wallets.",
+      "Engineered enterprise-grade multi-tenant isolation, JWT + MFA auth, RBAC, AES encryption, audit logging, rate limiting, and SOC 2–aligned security alongside a plugin marketplace for community extensions.",
     ],
     featured: true,
+    category: "flagship",
     liveUrl: "https://autopilot.monster",
     accent: "#6366f1",
   },
@@ -139,22 +142,94 @@ export const projects: ProjectItem[] = [
       "Optimized database performance, implemented Redis caching and rate limiting, and developed Kafka-based asynchronous workflows.",
     ],
     featured: false,
+    category: "flagship",
     accent: "#8b5cf6",
   },
   {
-    name: "OwnerScope – Property Intelligence Platform",
+    name: "OwnerScope – Home Ownership Platform",
     company: "Arivani Technologies",
     period: "Apr 2022 – Dec 2022",
     description:
-      "PropTech platform that helps homebuyers, property owners, and real estate investors make informed decisions through ownership analytics, investment assessments, and market insights.",
-    stack: ["React.js", "Node.js", "MongoDB", "Redis", "REST APIs", "JWT"],
+      "PropTech platform guiding homebuyers toward home ownership through a personality-based quiz, personalized resource delivery, and a unique connection key system that unlocks community features.",
+    stack: ["React.js", "Node.js", "Express.js", "MongoDB", "REST APIs", "JWT"],
     highlights: [
-      "Developed responsive user interfaces using React.js and scalable backend services using Node.js.",
-      "Built assessment and reporting modules, integrated third-party services.",
+      "Built the 3-minute personality quiz flow and Ownerscope profile generation with personalized resource delivery via email.",
+      "Developed the connection key system — unique per-user link and QR code that unlocks tiered community features.",
       "Optimized MongoDB queries and improved application performance with Redis caching.",
     ],
     featured: false,
+    category: "client",
+    liveUrl: "https://www.ownerscope.com",
     accent: "#22d3ee",
+  },
+  /* ── Client Work ── */
+  {
+    name: "Droupons – Doctor Appointment & Wellness",
+    company: "Arivani Technologies",
+    period: "Jan 2021 – Aug 2021",
+    description:
+      "Healthcare marketplace where doctors list services and patients book appointments using coupon codes — combined with real-time chat and an integrated wellness product store.",
+    stack: ["React.js", "Node.js", "Express.js", "MongoDB", "REST APIs", "JWT"],
+    highlights: [
+      "Built doctor listing and appointment booking system with coupon code–based service purchasing.",
+      "Developed real-time chat feature connecting patients with healthcare providers.",
+      "Created wellness store module for browsing and purchasing health products alongside bookings.",
+    ],
+    featured: false,
+    category: "client",
+    liveUrl: "https://www.droupons.com",
+    accent: "#10b981",
+  },
+  {
+    name: "Repair Zone USA – Device Repair Platform",
+    company: "Arivani Technologies",
+    period: "Aug 2021 – Dec 2021",
+    description:
+      "Service platform for a US-based mobile device repair shop at Southpoint Mall, Durham — enabling customers to view repair services, get instant price quotes, and book repair appointments online.",
+    stack: ["React.js", "Node.js", "Express.js", "MySQL", "REST APIs"],
+    highlights: [
+      "Developed service catalog covering iPhone, iPad, Samsung, tablet, and all other phone repairs.",
+      "Built instant price quote system with a low-price guarantee and transparent pricing display.",
+      "Integrated appointment booking and location-specific storefront pages for Southpoint Mall Durham.",
+    ],
+    featured: false,
+    category: "client",
+    liveUrl: "https://www.repairzoneusa.com",
+    accent: "#f59e0b",
+  },
+  {
+    name: "Kitchens & Beyond – Remodeling Platform",
+    company: "Arivani Technologies",
+    period: "Jan 2022 – Apr 2022",
+    description:
+      "Business web platform for a US-based kitchen and bathroom remodeling company — showcasing custom cabinet designs, countertop options (granite, quartz, marble), and full remodeling services.",
+    stack: ["React.js", "Node.js", "Express.js", "MySQL", "REST APIs"],
+    highlights: [
+      "Built service showcase pages for kitchen, bathroom, basement, and bedroom remodeling.",
+      "Developed image gallery and portfolio sections to present completed remodeling projects.",
+      "Created contact and inquiry form with business hours and location details for the Indiana-based business.",
+    ],
+    featured: false,
+    category: "client",
+    liveUrl: "https://www.kitchensanbeyond.com",
+    accent: "#f97316",
+  },
+  {
+    name: "Shop Hope Global – Shopify Fashion Store",
+    company: "Arivani Technologies",
+    period: "Sep 2022 – Feb 2023",
+    description:
+      "Shopify-based e-commerce fashion store selling handcrafted items from Haiti — featuring curated collections, new arrivals, bestsellers, gift cards, and a Square-powered secure checkout.",
+    stack: ["Shopify", "JavaScript", "Liquid", "React.js", "REST APIs"],
+    highlights: [
+      "Developed custom Shopify theme with product collections, new arrivals, and bestseller sections.",
+      "Integrated Square-powered secure checkout supporting CashApp, Apple Pay, Google Pay, and major credit cards.",
+      "Built responsive storefront with product search, cart management, and customer account features.",
+    ],
+    featured: false,
+    category: "client",
+    liveUrl: "https://www.shophopeglobal.org",
+    accent: "#ec4899",
   },
 ];
 
@@ -273,7 +348,7 @@ export interface CertificationItem {
 
 export const certifications: CertificationItem[] = [
   {
-    name: "Apprenticeship",
+    name: "Apprenticeship (6 Months)",
     issuer: "Softpro India Computer Technologies (P) Limited, Lucknow",
     date: "Jul 2019",
   },
