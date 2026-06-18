@@ -8,6 +8,8 @@ export const profile = {
   github: "https://github.com/amitsaroj",
   linkedin: "https://www.linkedin.com/in/amit-saroj/",
   website: "https://autopilot.monster",
+  whatsapp: "https://wa.me/918707831236",
+  resumeUrl: "/resume.pdf",
   yearsOfExperience: "5+",
   githubRepos: 62,
   openTo:
