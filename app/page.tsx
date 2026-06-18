@@ -3,6 +3,7 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
+import GitHubActivity from "./components/GitHubActivity";
 import Skills from "./components/Skills";
 import Education from "./components/Education";
 import Contact from "./components/Contact";
@@ -20,6 +21,8 @@ export default function Home() {
         <Experience />
         <hr className="section-divider" />
         <Projects />
+        <hr className="section-divider" />
+        <GitHubActivity />
         <hr className="section-divider" />
         <Skills />
         <hr className="section-divider" />

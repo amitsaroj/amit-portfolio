@@ -998,6 +998,251 @@ img {
   text-align: center;
 }
 
+/* ─── GITHUB ACTIVITY ─── */
+.gh-slider-wrap {
+  position: relative;
+}
+
+.gh-slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: var(--space-sm);
+  cursor: grab;
+}
+
+.gh-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.gh-slider:active {
+  cursor: grabbing;
+}
+
+.gh-repo-card {
+  flex: 0 0 288px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  backdrop-filter: blur(16px);
+}
+
+.gh-repo-card:hover {
+  border-color: color-mix(in srgb, var(--gh-lang-color, var(--accent-indigo)) 50%, transparent);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.gh-repo-lang-bar {
+  height: 3px;
+  background: var(--gh-lang-color, var(--accent-indigo));
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.gh-repo-body {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  flex: 1;
+}
+
+.gh-repo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.gh-repo-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.gh-repo-ext {
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: color var(--transition-fast);
+}
+
+.gh-repo-card:hover .gh-repo-ext {
+  color: var(--gh-lang-color, var(--accent-indigo));
+}
+
+.gh-fork-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 2px 8px;
+  width: fit-content;
+}
+
+.gh-repo-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.gh-repo-no-desc {
+  color: var(--text-tertiary);
+}
+
+.gh-repo-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.gh-lang-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.gh-lang-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gh-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.gh-updated {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-left: auto;
+}
+
+/* Skeleton */
+.gh-repo-skeleton {
+  pointer-events: none;
+}
+
+.gh-skel-line {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  animation: gh-pulse 1.6s ease-in-out infinite;
+}
+
+.gh-skel-title {
+  height: 14px;
+  width: 70%;
+  margin-bottom: var(--space-sm);
+}
+
+.gh-skel-desc {
+  height: 10px;
+  width: 90%;
+}
+
+.gh-skel-short {
+  width: 60%;
+}
+
+.gh-skel-tag {
+  height: 10px;
+  width: 40%;
+  margin-top: var(--space-md);
+}
+
+@keyframes gh-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* Controls */
+.gh-slider-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-xl);
+}
+
+.gh-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-indigo);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.gh-view-all:hover {
+  opacity: 0.8;
+}
+
+.gh-nav-btns {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.gh-nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  background: var(--surface-card);
+  color: var(--text-secondary);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(8px);
+}
+
+.gh-nav-btn:hover:not(:disabled) {
+  border-color: var(--accent-indigo);
+  color: var(--text-primary);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.gh-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 /* ─── SKILLS ─── */
 .skill-search-wrap {
   display: flex;

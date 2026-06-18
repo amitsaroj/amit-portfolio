@@ -361,6 +361,7 @@ export const navItems = [
   "About",
   "Experience",
   "Projects",
+  "GitHub",
   "Skills",
   "Education",
   "Contact",
