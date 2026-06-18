@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { profile } from "../data/profile";
 
@@ -153,18 +153,34 @@ const secondaryChannels: ContactChannel[] = [
   },
 ];
 
+function setLightPosition(e: React.MouseEvent<HTMLElement>, el: HTMLElement | null) {
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  el.style.setProperty("--spot-x", `${e.clientX - rect.left}px`);
+  el.style.setProperty("--spot-y", `${e.clientY - rect.top}px`);
+}
+
 function ChannelCard({ channel }: { channel: ContactChannel }) {
-  const className = `contact-channel-card contact-channel-${channel.accent}`;
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  const onMove = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    setLightPosition(e, ref.current);
+  }, []);
+
+  const className = `contact-channel-card contact-glow-card contact-channel-${channel.accent}`;
 
   return (
     <a
+      ref={ref}
       className={className}
       href={channel.href}
       target={channel.external ? "_blank" : undefined}
       rel={channel.external ? "noopener noreferrer" : undefined}
       download={channel.download}
       aria-label={channel.ariaLabel}
+      onMouseMove={onMove}
     >
+      <span className="contact-glow-shine" aria-hidden="true" />
       <span className="contact-channel-icon">{channel.icon}</span>
       <span className="contact-channel-copy">
         <span className="contact-channel-label">{channel.label}</span>
@@ -179,12 +195,17 @@ function ChannelCard({ channel }: { channel: ContactChannel }) {
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
+  const emailHeroRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(profile.email).catch(() => undefined);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const onEmailHeroMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    setLightPosition(e, emailHeroRef.current);
+  }, []);
 
   return (
     <section
@@ -208,9 +229,15 @@ export default function Contact() {
         </div>
 
         <motion.div className="contact-panel" variants={panelVariants}>
-          <div className="contact-panel-glow" aria-hidden="true" />
+          <div className="contact-panel-aurora" aria-hidden="true" />
+          <div className="contact-panel-border" aria-hidden="true" />
 
-          <div className="contact-email-hero">
+          <div
+            ref={emailHeroRef}
+            className="contact-email-hero contact-glow-card"
+            onMouseMove={onEmailHeroMove}
+          >
+            <span className="contact-glow-shine" aria-hidden="true" />
             <div className="contact-email-icon" aria-hidden="true">
               <MailIcon />
             </div>

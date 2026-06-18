@@ -72,17 +72,24 @@ export default function Navigation() {
         </button>
 
         <div className="nav-links" role="menubar">
-          {navItems.map((item: NavItem) => (
-            <button
-              key={item}
-              className={`nav-link${activeSection === item.toLowerCase() ? " nav-link-active" : ""}`}
-              onClick={() => scrollToSection(item)}
-              role="menuitem"
-              aria-current={activeSection === item.toLowerCase() ? "page" : undefined}
-            >
-              {item}
-            </button>
-          ))}
+          {navItems.map((item: NavItem) => {
+            const sectionId = item.toLowerCase();
+            return (
+              <a
+                key={item}
+                className={`nav-link${activeSection === sectionId ? " nav-link-active" : ""}`}
+                href={`#${sectionId}`}
+                role="menuitem"
+                aria-current={activeSection === sectionId ? "page" : undefined}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(item);
+                }}
+              >
+                {item}
+              </a>
+            );
+          })}
           <a
             className="nav-cta"
             href={profile.github}
@@ -129,11 +136,13 @@ export default function Navigation() {
               }}
             >
               {navItems.map((item: NavItem) => (
-                <motion.button
+                <motion.a
                   key={item}
                   className="nav-mobile-link"
                   role="menuitem"
-                  onClick={() => {
+                  href={`#${item.toLowerCase()}`}
+                  onClick={(e) => {
+                    e.preventDefault();
                     scrollToSection(item);
                     setMobileOpen(false);
                   }}
@@ -143,7 +152,7 @@ export default function Navigation() {
                   }}
                 >
                   {item}
-                </motion.button>
+                </motion.a>
               ))}
               <motion.a
                 className="nav-mobile-cta"

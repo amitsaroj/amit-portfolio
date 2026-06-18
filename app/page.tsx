@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navigation from "./components/Navigation";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -8,11 +9,15 @@ import Skills from "./components/Skills";
 import Education from "./components/Education";
 import Contact from "./components/Contact";
 import { profile } from "./data/profile";
+import { buildMetadata, INTERNAL_SECTIONS } from "./lib/seo";
+
+export const metadata: Metadata = buildMetadata({ page: "home" });
 
 export default function Home() {
   return (
     <div className="portfolio-root">
       <Navigation />
+  
       <main id="main-content" tabIndex={-1}>
         <Hero />
         <hr className="section-divider" />
@@ -40,6 +45,13 @@ export default function Home() {
               <span className="footer-role">{profile.title}</span>
             </div>
           </div>
+          <nav className="footer-nav" aria-label="Footer navigation">
+            {INTERNAL_SECTIONS.map((section) => (
+              <a key={section.id} className="footer-nav-link" href={section.href}>
+                {section.label}
+              </a>
+            ))}
+          </nav>
           <p className="footer-text">
             &copy; {new Date().getFullYear()} {profile.name}. Crafted with Next.js &amp; TypeScript.
           </p>
