@@ -3,24 +3,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects, type ProjectItem } from "../data/profile";
-
-const headerVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 32 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number], delay: i * 0.1 },
-  }),
-};
+import { sectionHeaderVariants, cardRevealVariants } from "../lib/animations";
+import TiltCard from "./motion/TiltCard";
 
 const ExternalLinkIcon = () => (
   <svg
@@ -62,17 +46,17 @@ function ProjectCard({
   featured: boolean;
 }) {
   return (
-    <motion.article
-      className={`project-card${featured ? " project-card-featured" : ""}`}
-      aria-label={project.name}
-      custom={index}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-60px" }}
-      variants={cardVariants}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      style={{ "--project-accent": project.accent } as React.CSSProperties}
-    >
+    <TiltCard className={`project-card-wrap${featured ? " project-card-wrap-featured" : ""}`}>
+      <motion.article
+        className={`project-card project-card-premium${featured ? " project-card-featured" : ""}`}
+        aria-label={project.name}
+        custom={index}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
+        variants={cardRevealVariants}
+        style={{ "--project-accent": project.accent } as React.CSSProperties}
+      >
       <div
         className="project-card-top-bar"
         style={{ background: `linear-gradient(90deg, ${project.accent}, ${project.accent}66)` }}
@@ -116,7 +100,8 @@ function ProjectCard({
           )}
         </div>
       </div>
-    </motion.article>
+      </motion.article>
+    </TiltCard>
   );
 }
 
@@ -147,7 +132,7 @@ export default function Projects() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
-        variants={headerVariants}
+        variants={sectionHeaderVariants}
       >
         <span className="section-label">Work</span>
         <h2 className="section-title">Projects</h2>

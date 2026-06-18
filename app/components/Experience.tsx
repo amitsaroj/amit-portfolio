@@ -101,8 +101,8 @@ export default function Experience() {
         </p>
       </motion.div>
 
-      <div className="timeline" aria-label="Career timeline">
-        <div className="timeline-line" aria-hidden="true" />
+      <div className="timeline timeline-premium" aria-label="Career timeline">
+        <div className="timeline-line timeline-line-glow" aria-hidden="true" />
         {experience.map((exp, index) => (
           <ExperienceCard key={exp.company} exp={exp} index={index} />
         ))}

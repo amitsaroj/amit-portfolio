@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { profile, navItems, type NavItem } from "../data/profile";
+import { useScrollDirection } from "../lib/animations";
 
 function scrollToSection(id: string) {
   document
@@ -14,6 +15,8 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
   const [scrolled, setScrolled] = useState(false);
+  const scrollDirection = useScrollDirection();
+  const navHidden = scrolled && scrollDirection === "down" && !mobileOpen;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,11 +59,11 @@ export default function Navigation() {
 
   return (
     <motion.nav
-      className={`nav-bar${scrolled ? " nav-scrolled" : ""}`}
+      className={`nav-bar nav-bar-glass${scrolled ? " nav-scrolled" : ""}${navHidden ? " nav-hidden" : ""}`}
       aria-label="Primary navigation"
       initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] }}
+      animate={{ opacity: 1, y: navHidden ? -80 : 0 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="nav-inner">
         <button
@@ -124,7 +127,7 @@ export default function Navigation() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
+            transition={{ type: "spring", stiffness: 380, damping: 32 }}
           >
             <motion.div
               className="nav-mobile-links"

@@ -3,6 +3,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { profile } from "../data/profile";
+import {
+  staggerContainer,
+  slideUp,
+  blurReveal,
+  useSpotlightGlow,
+} from "../lib/animations";
+import AuroraBackground from "./motion/AuroraBackground";
+import BlurReveal from "./motion/BlurReveal";
+import MagneticWrapper from "./motion/MagneticWrapper";
 
 function useCountUp(target: number, duration: number, start: boolean) {
   const [count, setCount] = useState(0);
@@ -39,25 +48,10 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
-  },
-};
-
 export default function Hero() {
   const [counted, setCounted] = useState(false);
   const ref = useRef<HTMLElement>(null);
+  const { ref: glassRef, onMove } = useSpotlightGlow();
 
   useEffect(() => {
     const timer = setTimeout(() => setCounted(true), 600);
@@ -65,105 +59,118 @@ export default function Hero() {
   }, []);
 
   const repoCount = useCountUp(profile.githubRepos, 1.2, counted);
+  const [firstName, lastName] = profile.name.split(" ");
 
   return (
-    <section
-      className="section hero-section section-container"
-      id="hero"
-      ref={ref}
-      aria-label="Introduction"
-    >
-      <motion.div
-        className="hero-content"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div className="hero-badge" variants={itemVariants} aria-label="Availability status">
-          <span className="hero-badge-dot" aria-hidden="true" />
-          Open to senior roles in India &amp; remote
+    <section className="section hero-section" id="hero" ref={ref} aria-label="Introduction">
+      <AuroraBackground />
+
+      <div className="hero-layout section-container">
+        <motion.div
+          ref={glassRef as React.RefObject<HTMLDivElement>}
+          className="hero-glass-card"
+          onMouseMove={onMove}
+          variants={staggerContainer(0.1, 0.08)}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div className="hero-badge" variants={blurReveal} aria-label="Availability status">
+            <span className="hero-badge-dot" aria-hidden="true" />
+            Open to senior roles in India &amp; remote
+          </motion.div>
+
+          <motion.h1 className="hero-name" variants={slideUp}>
+            <BlurReveal text={firstName} as="span" className="hero-name-line" split="chars" />
+            <BlurReveal text={lastName} as="span" className="hero-name-line hero-name-accent" split="chars" delay={0.12} />
+            <span className="sr-only"> — {profile.title}, AI Engineer and MERN Developer in India</span>
+          </motion.h1>
+
+          <motion.p className="hero-title hero-gradient-text" variants={slideUp} role="doc-subtitle">
+            {profile.subtitle}
+          </motion.p>
+
+          <motion.p className="hero-description" variants={slideUp}>
+            {profile.summary}
+          </motion.p>
+
+          <motion.div className="hero-actions" variants={slideUp}>
+            <MagneticWrapper>
+              <button
+                className="btn-primary btn-premium"
+                onClick={() => scrollToSection("projects")}
+                aria-label="View projects section"
+              >
+                View Projects
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" x2="21" y1="14" y2="3" />
+                </svg>
+              </button>
+            </MagneticWrapper>
+            <MagneticWrapper strength={0.18}>
+              <a
+                className="btn-secondary btn-premium"
+                href={profile.resumeUrl}
+                download="Amit_Saroj_5_Years.pdf"
+                aria-label="Download Amit Saroj's resume"
+              >
+                Download Resume
+                <DownloadIcon />
+              </a>
+            </MagneticWrapper>
+            <MagneticWrapper strength={0.18}>
+              <a
+                className="btn-whatsapp btn-premium"
+                href={profile.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Connect with Amit Saroj on WhatsApp (opens in new tab)"
+              >
+                WhatsApp
+                <WhatsAppIcon />
+              </a>
+            </MagneticWrapper>
+          </motion.div>
+
+          <motion.div className="hero-stats hero-stats-glass" variants={slideUp} aria-label="Career statistics">
+            <div className="hero-stat">
+              <span className="hero-stat-value">{profile.yearsOfExperience} YOE</span>
+              <span className="hero-stat-label">Verified Experience</span>
+            </div>
+            <div className="hero-stat-divider" aria-hidden="true" />
+            <div className="hero-stat">
+              <span className="hero-stat-value">3</span>
+              <span className="hero-stat-label">Structured Employers</span>
+            </div>
+            <div className="hero-stat-divider" aria-hidden="true" />
+            <div className="hero-stat">
+              <span className="hero-stat-value">{repoCount}</span>
+              <span className="hero-stat-label">GitHub Repositories</span>
+            </div>
+          </motion.div>
         </motion.div>
 
-        <motion.h1 className="hero-name" variants={itemVariants}>
-          {profile.name.split(" ")[0]}
-          <br />
-          {profile.name.split(" ")[1]}
-          <span className="sr-only"> — {profile.title}, AI Engineer and MERN Developer in India</span>
-        </motion.h1>
-
-        <motion.p className="hero-title" variants={itemVariants} role="doc-subtitle">
-          {profile.subtitle}
-        </motion.p>
-
-        <motion.p className="hero-description" variants={itemVariants}>
-          {profile.summary}
-        </motion.p>
-
-        <motion.div className="hero-actions" variants={itemVariants}>
-          <button
-            className="btn-primary"
-            onClick={() => scrollToSection("projects")}
-            aria-label="View projects section"
+        <motion.aside
+          className="hero-profile"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          aria-label="Profile"
+        >
+          <div className="hero-profile-ring" aria-hidden="true" />
+          <motion.div
+            className="hero-profile-avatar"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
           >
-            View Projects
-            <svg
-              aria-hidden="true"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" x2="21" y1="14" y2="3" />
-            </svg>
-          </button>
-          <a
-            className="btn-secondary"
-            href={profile.resumeUrl}
-            download="Amit_Saroj_5_Years.pdf"
-            aria-label="Download Amit Saroj's resume"
-          >
-            Download Resume
-            <DownloadIcon />
-          </a>
-          <a
-            className="btn-whatsapp"
-            href={profile.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Connect with Amit Saroj on WhatsApp (opens in new tab)"
-          >
-            WhatsApp
-            <WhatsAppIcon />
-          </a>
-        </motion.div>
-
-        <motion.div className="hero-stats" variants={itemVariants} aria-label="Career statistics">
-          <div className="hero-stat">
-            <span className="hero-stat-value" aria-label={`${profile.yearsOfExperience} years of experience`}>
-              {profile.yearsOfExperience} YOE
-            </span>
-            <span className="hero-stat-label">Verified Experience</span>
-          </div>
-          <div className="hero-stat-divider" aria-hidden="true" />
-          <div className="hero-stat">
-            <span className="hero-stat-value" aria-label="3 structured employers">3</span>
-            <span className="hero-stat-label">Structured Employers</span>
-          </div>
-          <div className="hero-stat-divider" aria-hidden="true" />
-          <div className="hero-stat">
-            <span className="hero-stat-value" aria-label={`${repoCount} GitHub repositories`}>
-              {repoCount}
-            </span>
-            <span className="hero-stat-label">GitHub Repositories</span>
-          </div>
-        </motion.div>
-      </motion.div>
+            <span>AS</span>
+          </motion.div>
+          <p className="hero-profile-name">{profile.name}</p>
+          <p className="hero-profile-role">{profile.title}</p>
+          <p className="hero-profile-location">{profile.location}</p>
+        </motion.aside>
+      </div>
     </section>
   );
 }

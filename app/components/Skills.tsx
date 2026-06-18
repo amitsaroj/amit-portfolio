@@ -68,7 +68,7 @@ function SkillCategoryCard({
 
   return (
     <motion.div
-      className="skill-category-card"
+      className="skill-category-card skill-category-card-premium"
       custom={index}
       initial="hidden"
       whileInView="visible"
