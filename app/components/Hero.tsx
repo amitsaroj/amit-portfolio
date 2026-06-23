@@ -10,7 +10,6 @@ import {
   useSpotlightGlow,
 } from "../lib/animations";
 import AuroraBackground from "./motion/AuroraBackground";
-import BlurReveal from "./motion/BlurReveal";
 import MagneticWrapper from "./motion/MagneticWrapper";
 
 function useCountUp(target: number, duration: number, start: boolean) {
@@ -65,8 +64,7 @@ export default function Hero() {
     <section className="section hero-section" id="hero" ref={ref} aria-label="Introduction">
       <AuroraBackground />
 
-      <div className="hero-layout section-container">
-        <motion.div
+      <motion.div
           ref={glassRef as React.RefObject<HTMLDivElement>}
           className="hero-glass-card"
           onMouseMove={onMove}
@@ -74,14 +72,15 @@ export default function Hero() {
           initial="hidden"
           animate="visible"
         >
+          <div className="hero-glass-inner section-container">
           <motion.div className="hero-badge" variants={blurReveal} aria-label="Availability status">
             <span className="hero-badge-dot" aria-hidden="true" />
             Open to senior roles in India &amp; remote
           </motion.div>
 
           <motion.h1 className="hero-name" variants={slideUp}>
-            <BlurReveal text={firstName} as="span" className="hero-name-line" split="chars" />
-            <BlurReveal text={lastName} as="span" className="hero-name-line hero-name-accent" split="chars" delay={0.12} />
+            <span className="hero-name-line">{firstName}</span>
+            <span className="hero-name-line hero-name-accent">{lastName}</span>
             <span className="sr-only"> — {profile.title}, AI Engineer and MERN Developer in India</span>
           </motion.h1>
 
@@ -149,28 +148,8 @@ export default function Hero() {
               <span className="hero-stat-label">GitHub Repositories</span>
             </div>
           </motion.div>
+          </div>
         </motion.div>
-
-        <motion.aside
-          className="hero-profile"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          aria-label="Profile"
-        >
-          <div className="hero-profile-ring" aria-hidden="true" />
-          <motion.div
-            className="hero-profile-avatar"
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <span>AS</span>
-          </motion.div>
-          <p className="hero-profile-name">{profile.name}</p>
-          <p className="hero-profile-role">{profile.title}</p>
-          <p className="hero-profile-location">{profile.location}</p>
-        </motion.aside>
-      </div>
     </section>
   );
 }
